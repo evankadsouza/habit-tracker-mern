@@ -18,25 +18,35 @@ export const AddHabit = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const currentDate = new Date().toLocaleDateString();
 
-    // Get existing habits from local storage
-    const existingHabits = JSON.parse(localStorage.getItem(currentDate)) || [];
+    try {
+      const response = await fetch('http://localhost:5000/addhabits', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(habitData),
+      });
 
-    // Add new habit to the list
-    existingHabits.push({ ...habitData, checked: false });
+      if (!response.ok) {
+        throw new Error('Failed to add habit');
+      }
 
-    // Save updated habits to local storage
-    localStorage.setItem(currentDate, JSON.stringify(existingHabits));
+      const data = await response.json();
+      console.log(data.message);  // Handle success response
+      alert(data.message)
 
-    // Reset form after submission
-    setHabitData({
-      name: '',
-      category: '',
-      frequency: 'Daily',
-    });
+      // Reset form after submission
+      setHabitData({
+        name: '',
+        category: '',
+        frequency: 'Daily',
+      });
+    } catch (error) {
+      console.error('Error adding habit:', error.message);  // Handle error response
+    }
   };
 
   return (
