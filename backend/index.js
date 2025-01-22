@@ -2,9 +2,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+
 const HabitData = require('./models/HabitData.js');  // Import the HabitData model
 
 require('dotenv').config();  // Load environment variables
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const SSH_KEY = 'AFY5fdnu72';
+
 
 const app = express();
 
@@ -49,5 +54,7 @@ app.get('/gethabits', async (req, res) => {
 });
 
 app.listen(5000, () => {
+
   console.log('Server is running on port 5000');
 });
+
